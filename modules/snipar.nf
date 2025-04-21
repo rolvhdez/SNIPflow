@@ -23,7 +23,7 @@ process runSiblingsFGWAS {
     gwas.py ${phenotype} \
         --bed ${bedfile} \
         --pedigree ${pedigree} \
-        --cpu 4 --threads 1 \
+        --cpu 8 --threads 8 \
         --out chr_${chr}
     """
 }
