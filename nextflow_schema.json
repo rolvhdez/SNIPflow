@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/rolvhdez/SNIPflow/main/nextflow_schema.json",
+  "title": " pipeline parameters",
+  "description": "",
+  "type": "object",
+  "defs": {
+    "inputs": {
+      "title": "Inputs",
+      "type": "object",
+      "description": "",
+      "default": "",
+      "properties": {
+        "baseline": {
+          "type": "string",
+          "format": "file-path",
+          "description": "The MCPS (QC or not) baseline survey file."
+        },
+        "kinship": {
+          "type": "string",
+          "format": "file-path",
+          "description": "A kinship file made with KING software."
+        },
+        "genotype": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Folder with the genotype files (.bed, .bim, .fam) that will be used."
+        },
+        "chr_range": {
+          "type": "string",
+          "description": "Range of choromosomes to be processed (e.g 6 10-15 20-22). Defaults to all autosomal.",
+          "default": "1-22"
+        },
+        "outDir": {
+          "type": "string",
+          "description": "Output folder.",
+          "default": "./results"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/definitions/inputs"
+    }
+  ]
+}
