@@ -1,12 +1,5 @@
 #!/usr/bin/env nextflow
 
-/* Pipeline parameters */
-params.baseline=""
-params.kinship=""
-params.genotype=""
-params.chr_range="1-22"
-params.outDir="./output"
-
 /* Processes */
 include { createAgesexKinship } from './modules/input-preps.nf'
 include { createPedigree } from './modules/input-preps.nf'
@@ -33,7 +26,7 @@ def expandRanges(String str) {
 workflow {
     // Find the grouped PLINK files (.bed, .bim, .fam)
     Channel
-        .fromFilePairs ("${params.genotype}.{bed,fam,bim}", size:3, flat : true)
+        .fromFilePairs ("${params.genotype}/*.{bed,fam,bim}", size:3, flat: true)
         .ifEmpty { error "No matching plink files" }
         .set { raw_plink_data }
 
