@@ -1,47 +1,65 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/rolvhdez/SNIPflow/main/nextflow_schema.json",
-  "title": " pipeline parameters",
-  "description": "",
-  "type": "object",
-  "defs": {
-    "inputs": {
-      "title": "Inputs",
-      "type": "object",
-      "description": "",
-      "default": "",
-      "properties": {
-        "baseline": {
-          "type": "string",
-          "format": "file-path",
-          "description": "The MCPS (QC or not) baseline survey file."
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/YOUR_PIPELINE/master/nextflow_schema.json",
+    "title": "Nextflow pipeline parameters",
+    "description": "This pipeline uses Nextflow and processes some kind of data. The JSON Schema was built using the nf-core pipeline schema builder.",
+    "type": "object",
+    "$defs": {
+        "input_files": {
+            "title": "Input files",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "baseline": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "(Required) MCPS baseline survey to be used as phenotype file.",
+                    "mimetype": "text/csv"
+                },
+                "kinship": {
+                    "type": "string",
+                    "description": "(Required) KING output file (.seg) containing the relationships between individuals.",
+                    "format": "path"
+                },
+                "genotype": {
+                    "type": "string",
+                    "description": "(Required) Folder with PLINK files (.bed, .bim, .fam) to be processed.",
+                    "format": "directory-path"
+                }
+            },
+            "required": [
+                "baseline",
+                "kinship",
+                "genotype"
+            ]
         },
-        "kinship": {
-          "type": "string",
-          "format": "file-path",
-          "description": "A kinship file made with KING software."
-        },
-        "genotype": {
-          "type": "string",
-          "format": "directory-path",
-          "description": "Folder with the genotype files (.bed, .bim, .fam) that will be used."
-        },
-        "chr_range": {
-          "type": "string",
-          "description": "Range of choromosomes to be processed (e.g 6 10-15 20-22). Defaults to all autosomal.",
-          "default": "1-22"
-        },
-        "outDir": {
-          "type": "string",
-          "description": "Output folder.",
-          "default": "./results"
+        "additional_parameters": {
+            "title": "Additional parameters",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "chr_range": {
+                    "type": "string",
+                    "description": "(Optional) Range of chromosomes to be used for the analysis. Defaults to all autosomal chromosomes.",
+                    "default": "1-22"
+                },
+                "outDir": {
+                    "type": "string",
+                    "description": "(Optional) Output folder. Defaults to \"./results\".",
+                    "default": "./results",
+                    "format": "directory-path"
+                }
+            }
         }
-      }
-    }
-  },
-  "allOf": [
-    {
-      "$ref": "#/defs/inputs"
-    }
-  ]
+    },
+    "allOf": [
+        {
+            "$ref": "#/$defs/input_files"
+        },
+        {
+            "$ref": "#/$defs/additional_parameters"
+        }
+    ]
 }
