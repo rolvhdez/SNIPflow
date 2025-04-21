@@ -41,7 +41,7 @@
   },
   "allOf": [
     {
-      "$ref": "#/definitions/inputs"
+      "$ref": "#/defs/inputs"
     }
   ]
 }
