@@ -20,18 +20,30 @@
                 "kinship": {
                     "type": "string",
                     "description": "(Required) KING output file (.seg) containing the relationships between individuals.",
-                    "format": "path"
+                    "format": "file-path"
                 },
-                "genotype": {
+                "bed": {
                     "type": "string",
-                    "description": "(Required) Folder with PLINK files (.bed, .bim, .fam) to be processed.",
-                    "format": "directory-path"
+                    "description": "(Required) PLINK file (.bed) to be processed.",
+                    "format": "file-path"
+                },
+                "bim": {
+                    "type": "string",
+                    "description": "(Required) PLINK file (.bim) to be processed.",
+                    "format": "file-path"
+                },
+                "fam": {
+                    "type": "string",
+                    "description": "(Required) PLINK file (.fam) to be processed.",
+                    "format": "file-path"
                 }
             },
             "required": [
                 "baseline",
                 "kinship",
-                "genotype"
+                "bedfile",
+                "bimfile",
+                "famfile"
             ]
         },
         "additional_parameters": {

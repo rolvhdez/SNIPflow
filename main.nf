@@ -1,5 +1,13 @@
 #!/usr/bin/env nextflow
 
+params.baseline = null
+params.kinship = null
+params.bed = null
+params.bim = null
+params.fam = null
+params.chr_range = "1-22"
+params.outDir = "./results"
+
 /* Processes */
 include { createAgesexKinship } from './modules/input-preps.nf'
 include { createPedigree } from './modules/input-preps.nf'
@@ -25,10 +33,10 @@ def expandRanges(String str) {
 
 workflow {
     // Find the grouped PLINK files (.bed, .bim, .fam)
-    Channel
-        .fromFilePairs ("${params.genotype}/*.{bed,fam,bim}", size:3, flat: true)
-        .ifEmpty { error "No matching plink files" }
-        .set { raw_plink_data }
+//    Channel
+//        .fromFilePairs ("${params.genotype}/*.{bed,fam,bim}", size:3, flat: true)
+//        .ifEmpty { error "No matching plink files" }
+//        .set { raw_plink_data }
 
     // Make a list of the chromosomes to use
     Channel
@@ -39,7 +47,9 @@ workflow {
 
     /* INPUT FILES */
     segmentByChromosome(
-        raw_plink_data.first(),
+        params.bed,
+        params.bim,
+        params.fam,
         chr_channel
     )
     createAgesexKinship(

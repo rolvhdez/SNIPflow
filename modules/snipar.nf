@@ -2,6 +2,7 @@
 
 process runSiblingsFGWAS {
     publishDir "${params.outDir}/sumstats", mode: 'copy'
+    containerOptions '--user root'
 
     input:
         tuple path(bed), path(bim), path(fam)

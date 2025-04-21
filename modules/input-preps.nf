@@ -1,7 +1,8 @@
 #!/usr/bin/env nextflow
 
 process createAgesexKinship {
-    publishDir "${params.outDir}/input_files", mode: 'copy'
+//    publishDir "${params.outDir}/input_files", mode: 'copy'
+
     input:
     path baseline
     path kinship
@@ -54,6 +55,7 @@ process createAgesexKinship {
 
 process createPedigree {
     publishDir "${params.outDir}/input_files", mode: 'copy'
+    containerOptions '--user root'
 
     input:
     path agesex
@@ -152,9 +154,10 @@ process createPhenotype {
 }
 
 process segmentByChromosome {
-    publishDir "${params.outDir}/plink_files", mode: 'copy'
     input:
-    tuple val(pl), path(bed), path(bim), path(fam)
+    path bed
+    path bim
+    path fam
     val chr
 
     output:
@@ -163,6 +166,6 @@ process segmentByChromosome {
     script:
     """
     #!/bin/bash
-    plink --bfile $pl --chr $chr --make-bed --out "${bed.baseName}_chr$chr"
+    plink --bed "$bed" --bim "$bim" --fam "$fam" --chr $chr --make-bed --out "${bed.baseName}_chr$chr"
     """
 }
