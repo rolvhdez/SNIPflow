@@ -13,6 +13,7 @@ include { createAgesexKinship } from './modules/input-preps.nf'
 include { createPedigree } from './modules/input-preps.nf'
 include { createPhenotype } from './modules/input-preps.nf'
 include { segmentByChromosome } from './modules/input-preps.nf'
+include { infereIBD } from './modules/snipar.nf'
 include { runSiblingsFGWAS } from './modules/snipar.nf'
 
 /* Functions */	
@@ -32,12 +33,6 @@ def expandRanges(String str) {
 }
 
 workflow {
-    // Find the grouped PLINK files (.bed, .bim, .fam)
-//    Channel
-//        .fromFilePairs ("${params.genotype}/*.{bed,fam,bim}", size:3, flat: true)
-//        .ifEmpty { error "No matching plink files" }
-//        .set { raw_plink_data }
-
     // Make a list of the chromosomes to use
     Channel
         .of(expandRanges(params.chr_range.toString()))
@@ -49,8 +44,7 @@ workflow {
     segmentByChromosome(
         params.bed,
         params.bim,
-        params.fam,
-        chr_channel
+        params.fam
     )
     createAgesexKinship(
         params.baseline,
@@ -66,11 +60,21 @@ workflow {
         createPedigree.output
     )
 
-    /* SNIPAR */
+    /* SNIPAR 
+        The .out.map { i -> i[0].parent } processes are necessary
+        because SNIPAR looks for all files within a directory.
+        See: https://snipar.readthedocs.io/en/latest/tutorial.html#tutorial
+    */
+//    infereIBD(
+//        segmentByChromosome.out.map { i -> i[0].parent },
+//        createPedigree.output.pedigree,
+//        params.chr_range
+//    )
     runSiblingsFGWAS(
-        segmentByChromosome.output,
-        createPhenotype.output,
-        createPedigree.output,
-        chr_channel
+        segmentByChromosome.out.map { i -> i[0].parent },
+        createPhenotype.output.phenotype,
+        createPedigree.output.pedigree,
+        params.kinship,
+        params.chr_range
     )
 }

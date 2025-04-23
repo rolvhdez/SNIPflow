@@ -62,7 +62,7 @@ process createPedigree {
     path kinship
 
     output:
-    path "pedigree.txt"
+    path "pedigree.txt", emit: "pedigree"
 
     script:
     """
@@ -158,14 +158,16 @@ process segmentByChromosome {
     path bed
     path bim
     path fam
-    val chr
 
     output:
-    file "${bed.baseName}_chr$chr.{bed,bim,fam}"
+    file "chr_*.{bed,bim,fam}"
 
     script:
     """
     #!/bin/bash
-    plink --bed "$bed" --bim "$bim" --fam "$fam" --chr $chr --make-bed --out "${bed.baseName}_chr$chr"
+    for i in {1..22}; do
+        plink --bed "$bed" --bim "$bim" --fam "$fam" \
+        --chr \$i --make-bed --out "chr_\$i"
+    done
     """
 }
