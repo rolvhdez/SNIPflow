@@ -16,4 +16,4 @@ RUN mkdir -p ${PLINK_DIR} && \
 ENV PATH="${PLINK_DIR}:${PATH}"
 
 # Install Python packages
-RUN pip install snipar==0.0.20 dxpy
+RUN pip install snipar==0.0.22 dxpy
