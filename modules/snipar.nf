@@ -19,7 +19,8 @@ process infereIBD {
         --bed ${bed_path}/chr_@ \
         --pedigree ${pedigree} \
         --chr_range ${chr_range} \
-        --threads 4 --ld_out --batches 4 \
+        --threads 10 --batches 1 \
+        --ld_out \
         --out chr_@
     """
 }
