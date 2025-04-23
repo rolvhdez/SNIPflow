@@ -14,28 +14,32 @@
                 "baseline": {
                     "type": "string",
                     "format": "file-path",
-                    "description": "(Required) MCPS baseline survey to be used as phenotype file.",
+                    "description": "MCPS baseline survey to be used as phenotype file.",
                     "mimetype": "text/csv"
                 },
                 "kinship": {
                     "type": "string",
-                    "description": "(Required) KING output file (.seg) containing the relationships between individuals.",
-                    "format": "file-path"
+                    "description": "KING output file (.seg) containing the relationships between individuals.",
+                    "format": "file-path",
+                    "pattern": "^.+\\.seg$"
                 },
                 "bed": {
                     "type": "string",
-                    "description": "(Required) PLINK file (.bed) to be processed.",
-                    "format": "file-path"
+                    "description": "PLINK file (.bed) to be processed.",
+                    "format": "file-path",
+                    "pattern": "^.+\\.bed$"
                 },
                 "bim": {
                     "type": "string",
-                    "description": "(Required) PLINK file (.bim) to be processed.",
-                    "format": "file-path"
+                    "description": "PLINK file (.bim) to be processed.",
+                    "format": "file-path",
+                    "pattern": "^.+\\.bim$"
                 },
                 "fam": {
                     "type": "string",
-                    "description": "(Required) PLINK file (.fam) to be processed.",
-                    "format": "file-path"
+                    "description": "PLINK file (.fam) to be processed.",
+                    "format": "file-path",
+                    "pattern": "^.+\\.fam$"
                 }
             },
             "required": [
@@ -54,13 +58,13 @@
             "properties": {
                 "chr_range": {
                     "type": "string",
-                    "description": "(Optional) Range of chromosomes to be used for the analysis. Defaults to all autosomal chromosomes.",
+                    "description": "Range of chromosomes to be used for the analysis. Defaults to all autosomal chromosomes.",
                     "default": "1-22"
                 },
                 "outDir": {
                     "type": "string",
-                    "description": "(Optional) Output folder. Defaults to \"./results\".",
-                    "default": "./results",
+                    "description": "Name of the output folder. Defaults to 'results'.",
+                    "default": "results",
                     "format": "directory-path"
                 }
             }
