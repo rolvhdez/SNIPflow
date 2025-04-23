@@ -76,7 +76,7 @@ process createPedigree {
       , agesex_address="${agesex}"
       , same_parents_in_ped=True
     )
-    pedigree.to_csv("pedigree.txt", sep=" ", index=False, header=False)
+    pedigree.to_csv("pedigree.txt", sep=" ", index=False, header=True)
     """
 }
 
@@ -112,7 +112,7 @@ process createPhenotype {
     # Import data
     baseline = pd.read_csv("$baseline")
     kinship = pd.read_table("$kinship")
-    pedigree = pd.read_csv("$pedigree", sep=" ", header=None, names=["FID", "IID", "FATHER_ID", "MOTHER_ID"])
+    pedigree = pd.read_csv("$pedigree", sep=" ")
 
     # Preliminary baseline transformation
     dfk1 = kinship[["FID1", "ID1"]].rename(columns={"FID1": "FID", "ID1": "IID"})
