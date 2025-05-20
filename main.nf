@@ -14,6 +14,7 @@ include { createPedigree } from './modules/input-preps.nf'
 include { createPhenotype } from './modules/input-preps.nf'
 include { segmentByChromosome } from './modules/input-preps.nf'
 include { infereIBD } from './modules/snipar.nf'
+include { imputeGenotypes } from './modules/snipar.nf'
 include { runSiblingsFGWAS } from './modules/snipar.nf'
 
 /* Functions */	
@@ -33,13 +34,6 @@ def expandRanges(String str) {
 }
 
 workflow {
-    // Make a list of the chromosomes to use
-    Channel
-        .of(expandRanges(params.chr_range.toString()))
-        .ifEmpty { error "No chromosomes found in the range ${params.chr_range}" }
-        .flatten()
-        .set { chr_channel }
-
     /* INPUT FILES */
     segmentByChromosome(
         params.bed,
@@ -65,13 +59,20 @@ workflow {
         because SNIPAR looks for all files within a directory.
         See: https://snipar.readthedocs.io/en/latest/tutorial.html#tutorial
     */
-//    infereIBD(
-//        segmentByChromosome.out.map { i -> i[0].parent },
-//        createPedigree.output.pedigree,
-//        params.chr_range
-//    )
+    infereIBD(
+        segmentByChromosome.out.map { i -> i[0].parent },
+        createPedigree.output.pedigree,
+        params.chr_range
+    )
+    imputeGenotypes(
+        segmentByChromosome.out.map { i -> i[0].parent },
+        infereIBD.out.map { i -> i[0].parent },
+        createPedigree.output.pedigree,
+        params.chr_range
+    )
     runSiblingsFGWAS(
         segmentByChromosome.out.map { i -> i[0].parent },
+        imputeGenotypes.out.map { i -> i[0].parent },
         createPhenotype.output.phenotype,
         createPedigree.output.pedigree,
         params.kinship,
